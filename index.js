@@ -1,31 +1,31 @@
 import fetch from "node-fetch";
-import http from "http";
-http
-  .createServer(function (req, res) {
-    // console.log(`Just got a request at ${req.url}!`)
-    // res.write('Yo!');
-    // res.end();
+import express from "express";
+import * as dotenv from "dotenv";
+dotenv.config();
 
-    const YELP_API_KEY =
-      "w8uQv046531_c25osdbeZm3kkvK3G5I5DmK9bmIeeuJuOatLqVrV9KVWss7EaFvbW3cYkcricx9ItFTWnWH7LfC-Xvs4F-ldIwz4x_Re9eaJrXJkxIVRl8ryAecRX3Yx";
+const PORT = process.env.PORT || 3000;
 
-    const yelpAPI_URL =
-      "https://api.yelp.com/v3/businesses/C6zSWewDs7-yaATp1Fh0BA/reviews";
+const app = express();
 
-    fetch(yelpAPI_URL, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${YELP_API_KEY}`,
-        "Contenct-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        res.setHeader("Content-Type", "application/json");
-        res.end(JSON.stringify(result.reviews));
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
+app.get("/yelp-review", async (req, res) => {
+  const result = await yelpReview(req.query.business_id);
+  res.json(result);
+});
+
+app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+const yelpReview = async (businessId) => {
+  const yelpAPI_URL = `https://api.yelp.com/v3/businesses/${businessId}/reviews`;
+  return await fetch(yelpAPI_URL, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${process.env.YELP_API_KEY}`,
+      "Content-Type": "application/json",
+    },
   })
-  .listen(process.env.PORT || 3000);
+    .then((response) => response.json())
+    .then((res) => res.reviews)
+    .catch((error) => {
+      console.log("error", error);
+    });
+};
