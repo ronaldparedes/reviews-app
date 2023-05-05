@@ -1,12 +1,13 @@
 import fetch from "node-fetch";
 import express from "express";
+import cors from "cors";
 import * as dotenv from "dotenv";
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
-
+app.use(cors());
 app.get("/yelp-review", async (req, res) => {
   const result = await yelpReview(req.query.business_id);
   res.json(result);
