@@ -6,7 +6,8 @@ http.createServer(function (req, res) {
 }).listen(process.env.PORT || 3000); 
 */
 
-const fetch = require("node-fetch");
+// const fetch = require("node-fetch");
+import fetch from "node-fetch";
 
 const YELP_API_KEY =
   "w8uQv046531_c25osdbeZm3kkvK3G5I5DmK9bmIeeuJuOatLqVrV9KVWss7EaFvbW3cYkcricx9ItFTWnWH7LfC-Xvs4F-ldIwz4x_Re9eaJrXJkxIVRl8ryAecRX3Yx";
